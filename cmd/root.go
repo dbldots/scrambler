@@ -15,6 +15,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -22,9 +23,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
-
-var cfgFile string
-var secret string
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -44,28 +42,29 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	//RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.scrambler.yaml)")
-	RootCmd.PersistentFlags().StringVarP(&secret, "secret", "s", "", "Your encryption secret")
-	RootCmd.MarkPersistentFlagRequired("secret")
+	RootCmd.PersistentFlags().StringP("secret", "s", "", "Your encryption secret")
+	viper.BindPFlag("secret", RootCmd.PersistentFlags().Lookup("secret"))
 }
 
 func initConfig() {
-	if cfgFile != "" {
-		viper.SetConfigFile(cfgFile)
-	} else {
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		viper.AddConfigPath(home)
-		viper.SetConfigName(".scrambler")
+	home, err := homedir.Dir()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
+	viper.AddConfigPath(home)
+	viper.SetConfigName(".scrambler")
+
+	viper.SetEnvPrefix("scrambler")
 	viper.AutomaticEnv()
+	viper.ReadInConfig()
+}
 
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+func checkSecret() error {
+	if viper.GetString("secret") == "" {
+		return errors.New(`Required "secret" have/has not been set`)
 	}
+
+	return nil
 }

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"regexp"
@@ -9,20 +10,32 @@ import (
 
 	"github.com/richard-lyman/lithcrypt"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
-
-var file string
 
 var decryptCmd = &cobra.Command{
 	Use:   "decrypt",
 	Short: "Decrypt a file",
 	Long: `Decrypt a file with secured values. For example:
 
-scrambler decrypt --secret P@assw0rd --file config.yml`,
+scrambler decrypt config.yml`,
+	Args: func(cmd *cobra.Command, args []string) error {
+		if err := checkSecret(); err != nil {
+			return err
+		}
+
+		if len(args) == 0 {
+			return errors.New(`You have to provide a file to decrypt`)
+		}
+
+		return nil
+	},
 	Run: func(cmd *cobra.Command, args []string) {
-		buf, _ := ioutil.ReadFile(file)
-		pass := []byte(secret)
+		buf, _ := ioutil.ReadFile(args[0])
+		pass := []byte(viper.GetString("secret"))
 		search := regexp.MustCompile(`SCRAMBLED\(.*\)`)
+
+		fmt.Println("Using secret '" + viper.GetString("secret") + "'")
 
 		result := search.ReplaceAllFunc(buf, func(s []byte) []byte {
 			match, _ := b64.StdEncoding.DecodeString(string(s[10 : len(s)-1]))
@@ -36,6 +49,4 @@ scrambler decrypt --secret P@assw0rd --file config.yml`,
 
 func init() {
 	RootCmd.AddCommand(decryptCmd)
-	decryptCmd.Flags().StringVarP(&file, "file", "f", "", "File to decrypt")
-	decryptCmd.MarkFlagRequired("file")
 }

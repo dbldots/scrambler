@@ -16,7 +16,7 @@ go get github.com/dbldots/scrambler
 To encrypt a value
 
 ```
-scrambler encrypt --secret P@assw0rd --value [your-value]
+scrambler encrypt --secret P@assw0rd [your-value]
 ```
 
 .. then copy and paste the output into the file you want to share with others, e.g. a config file.
@@ -26,7 +26,25 @@ scrambler encrypt --secret P@assw0rd --value [your-value]
 To decrypt a file
 
 ```
-scrambler decrypt --secret P@ssw0rd --file [your-file]
+scrambler decrypt --secret P@ssw0rd [your-file]
+```
+
+## Secret config
+
+Instead of passing the secret via the `--secret` flag you can also provide the secret as..
+
+### Environment variable
+
+```
+export SCRAMBLER_SECRET=P@ssw0rd
+```
+
+### Via config file
+
+To use a config file for scrambler, create a file in your home directory called `.scrambler.yml`:
+
+```
+secret: P@ssw0rd
 ```
 
 ## Todo
