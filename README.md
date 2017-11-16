@@ -31,4 +31,6 @@ scrambler decrypt --secret P@ssw0rd --file [your-file]
 
 ## Todo
 
+* support secret environment variable
+* support scrambler config file
 * add support to manage (create/read/update) yaml keys
