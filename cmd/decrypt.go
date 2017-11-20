@@ -33,12 +33,10 @@ scrambler decrypt config.yml`,
 	Run: func(cmd *cobra.Command, args []string) {
 		buf, _ := ioutil.ReadFile(args[0])
 		pass := []byte(viper.GetString("secret"))
-		search := regexp.MustCompile(`SCRAMBLED\(.*\)`)
-
-		fmt.Println("Using secret '" + viper.GetString("secret") + "'")
+		search := regexp.MustCompile(`SCRAMBLED:[^\n ]*`)
 
 		result := search.ReplaceAllFunc(buf, func(s []byte) []byte {
-			match, _ := b64.StdEncoding.DecodeString(string(s[10 : len(s)-1]))
+			match, _ := b64.StdEncoding.DecodeString(string(s[10:len(s)]))
 			decoded, _ := lithcrypt.Decrypt(pass, match)
 			return decoded
 		})

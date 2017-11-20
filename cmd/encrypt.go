@@ -32,10 +32,8 @@ scrambler encrypt "sensitive information"`,
 		payload := []byte(args[0])
 		pass := []byte(viper.GetString("secret"))
 
-		fmt.Println("Using secret '" + viper.GetString("secret") + "'")
-
 		encrypted, _ := lithcrypt.Encrypt(pass, payload)
-		result := "SCRAMBLED(" + b64.StdEncoding.EncodeToString(encrypted) + ")"
+		result := "SCRAMBLED:" + b64.StdEncoding.EncodeToString(encrypted)
 
 		fmt.Println("Encrypted Result:")
 		fmt.Println("---------------------------------------")
