@@ -6,9 +6,7 @@ import (
 
 	b64 "encoding/base64"
 
-	"github.com/richard-lyman/lithcrypt"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var encryptCmd = &cobra.Command{
@@ -30,10 +28,10 @@ scrambler encrypt "sensitive information"`,
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		payload := []byte(args[0])
-		pass := []byte(viper.GetString("secret"))
 
-		encrypted, _ := lithcrypt.Encrypt(pass, payload)
+		encrypted, _ := encrypt(payload)
 		result := "SCRAMBLED:" + b64.StdEncoding.EncodeToString(encrypted)
+		//result := "SCRAMBLED:" + fmt.Sprintf("%0x", encrypted)
 
 		fmt.Println("Encrypted Result:")
 		fmt.Println("---------------------------------------")

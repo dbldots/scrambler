@@ -18,11 +18,15 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"regexp"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
+
+var scrambledRegex = regexp.MustCompile(`SCRAMBLED:[^\n$]*`)
+var scrambleRegex = regexp.MustCompile(`SCRAMBLE:[^\n$]*`)
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
@@ -41,9 +45,6 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-
-	RootCmd.PersistentFlags().StringP("secret", "s", "", "Your encryption secret")
-	viper.BindPFlag("secret", RootCmd.PersistentFlags().Lookup("secret"))
 }
 
 func initConfig() {
@@ -61,9 +62,21 @@ func initConfig() {
 	viper.ReadInConfig()
 }
 
+var secret []byte
+var filler = []byte("123456789abcdefghijklmnopqrstuvz")
+
 func checkSecret() error {
 	if viper.GetString("secret") == "" {
 		return errors.New(`Required "secret" have/has not been set`)
+	}
+
+	secret = []byte(viper.GetString("secret"))
+
+	if len(secret) < 32 {
+		rest := filler[:(32 - len(secret))]
+		secret = append(secret, rest...)
+	} else if len(secret) > 32 {
+		secret = secret[:32]
 	}
 
 	return nil

@@ -4,13 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"regexp"
 
 	b64 "encoding/base64"
 
-	"github.com/richard-lyman/lithcrypt"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var readCmd = &cobra.Command{
@@ -32,12 +29,10 @@ scrambler read config.yml`,
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		buf, _ := ioutil.ReadFile(args[0])
-		pass := []byte(viper.GetString("secret"))
-		search := regexp.MustCompile(`SCRAMBLED:[^\n ]*`)
 
-		result := search.ReplaceAllFunc(buf, func(s []byte) []byte {
+		result := scrambledRegex.ReplaceAllFunc(buf, func(s []byte) []byte {
 			match, _ := b64.StdEncoding.DecodeString(string(s[10:len(s)]))
-			decoded, _ := lithcrypt.Decrypt(pass, match)
+			decoded, _ := decrypt(match)
 			return decoded
 		})
 
