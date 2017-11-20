@@ -13,19 +13,19 @@ import (
 	"github.com/spf13/viper"
 )
 
-var decryptCmd = &cobra.Command{
-	Use:   "decrypt",
-	Short: "Decrypt a file",
-	Long: `Decrypt a file with secured values. For example:
+var readCmd = &cobra.Command{
+	Use:   "read",
+	Short: "Read a file",
+	Long: `Read a file with secured values. For example:
 
-scrambler decrypt config.yml`,
+scrambler read config.yml`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if err := checkSecret(); err != nil {
 			return err
 		}
 
 		if len(args) == 0 {
-			return errors.New(`You have to provide a file to decrypt`)
+			return errors.New(`You have to provide a file to read`)
 		}
 
 		return nil
@@ -46,5 +46,5 @@ scrambler decrypt config.yml`,
 }
 
 func init() {
-	RootCmd.AddCommand(decryptCmd)
+	RootCmd.AddCommand(readCmd)
 }
