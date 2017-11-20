@@ -6,7 +6,7 @@ import (
 	"encoding/base64"
 )
 
-var iv = []byte("bundesliga201711")
+var iv = []byte("Ba4LfxiJ36E5vQW1")
 
 func encrypt(text []byte) ([]byte, error) {
 	block, _ := aes.NewCipher(secret)
