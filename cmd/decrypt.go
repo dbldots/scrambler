@@ -35,8 +35,6 @@ scrambler decrypt config.yml`,
 		pass := []byte(viper.GetString("secret"))
 		search := regexp.MustCompile(`SCRAMBLED\(.*\)`)
 
-		fmt.Println("Using secret '" + viper.GetString("secret") + "'")
-
 		result := search.ReplaceAllFunc(buf, func(s []byte) []byte {
 			match, _ := b64.StdEncoding.DecodeString(string(s[10 : len(s)-1]))
 			decoded, _ := lithcrypt.Decrypt(pass, match)
