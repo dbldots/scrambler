@@ -18,6 +18,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"regexp"
 
 	homedir "github.com/mitchellh/go-homedir"
@@ -80,4 +81,17 @@ func checkSecret() error {
 	}
 
 	return nil
+}
+
+func editFile(file string) {
+	cmd := os.Getenv("EDITOR")
+	if cmd == "" {
+		cmd = "vi"
+	}
+
+	editor := exec.Command(cmd, file)
+	editor.Stdin = os.Stdin
+	editor.Stdout = os.Stdout
+	editor.Stderr = os.Stderr
+	editor.Run()
 }

@@ -5,7 +5,6 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
-	"os/exec"
 
 	"github.com/spf13/cobra"
 )
@@ -41,13 +40,7 @@ scrambler edit config.yml`,
 		})
 
 		ioutil.WriteFile(file.Name(), result, 0644)
-
-		editor := exec.Command("vim", file.Name())
-		editor.Stdin = os.Stdin
-		editor.Stdout = os.Stdout
-		editor.Stderr = os.Stderr
-		editor.Run()
-
+		editFile(file.Name())
 		buf, _ = ioutil.ReadFile(file.Name())
 
 		result = scrambleRegex.ReplaceAllFunc(buf, func(s []byte) []byte {
