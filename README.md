@@ -49,6 +49,8 @@ scrambler read [your-file]
 
 ### Edit
 
+#### Encrypt single values
+
 To change values of a file that contains (or should contain) encrypted values:
 
 ```
@@ -79,3 +81,16 @@ four:
 
 Change anything after `SCRAMBLE:` to alter the values.
 You can also encrypt existing values or add new values by using the `SCRAMBLE:[value]` pattern.
+
+#### Encrypt whole file
+
+Alternatively you can also choose to encrypt the entire content of a file (e.g. keyfiles).
+
+Compared to the example for single values the `config.yml` file, if encrypted as a whole, looks like this:
+
+```
+:SCRAMBLED
+FNQDLqFAbbdYvhYkSL7f5spxSJGr+94GXZ97rA6W7X5QHIb7j41Mp5qRB0cYl+bvrR8hsuoINk7gupO5esgPUA==%
+```
+
+You can edit the contents of the file via `scrambler edit [your-file]`, still.
