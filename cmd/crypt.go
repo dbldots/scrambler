@@ -23,7 +23,7 @@ func decrypt(text []byte) ([]byte, error) {
 	cfb.XORKeyStream(text, text)
 	data, err := base64.StdEncoding.DecodeString(string(text))
 	if err != nil {
-		return nil, err
+		panic(`Unable to decrypt value, check your secret`)
 	}
 	return data, nil
 }
