@@ -86,7 +86,13 @@ You can also encrypt existing values or add new values by using the `SCRAMBLE:[v
 
 Alternatively you can also choose to encrypt the entire content of a file (e.g. keyfiles).
 
-Compared to the example for single values the `config.yml` file, if encrypted as a whole, looks like this:
+As an example, to encrypt all content of an existing file, run `scrambler edit [your-file]` and insert this line at the top
+
+```
+:SCRAMBLE
+```
+
+The `config.yml` file from above, if encrypted as a whole, after saving looks like this:
 
 ```
 :SCRAMBLED
