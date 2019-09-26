@@ -32,7 +32,7 @@ func decrypt(text []byte) ([]byte, error) {
 	data, err := base64.StdEncoding.DecodeString(string(text))
 	data = data[saltLength:len(data)] // remove salt
 	if err != nil {
-		return nil, err
+		panic(`Unable to decrypt value, check your secret`)
 	}
 	return data, nil
 }

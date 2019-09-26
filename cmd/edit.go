@@ -34,7 +34,7 @@ scrambler edit config.yml`,
 		buf, _ := ioutil.ReadFile(args[0])
 		var result []byte
 
-		if string(buf[0:10]) == `:SCRAMBLED` {
+		if len(buf) > 10 && string(buf[0:10]) == `:SCRAMBLED` {
 			content, _ := b64.StdEncoding.DecodeString(string(buf[11:]))
 			decrypted, _ := decrypt(content)
 			result = append([]byte(":SCRAMBLE\n"), decrypted...)
@@ -50,7 +50,7 @@ scrambler edit config.yml`,
 		editFile(file.Name())
 		buf, _ = ioutil.ReadFile(file.Name())
 
-		if string(buf[0:9]) == `:SCRAMBLE` {
+		if len(buf) > 9 && string(buf[0:9]) == `:SCRAMBLE` {
 			content := buf[10:]
 			encrypted, _ := encrypt(content)
 			value := ":SCRAMBLED\n" + b64.StdEncoding.EncodeToString(encrypted)
