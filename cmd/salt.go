@@ -1,15 +1,18 @@
 package cmd
 
 import (
-	"math/rand"
+	"crypto/rand"
 )
 
-const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+var saltLength = 16
 
-func salt() []byte {
-	b := make([]byte, 16)
-	for i := range b {
-		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+func salt() ([]byte, error) {
+	b := make([]byte, saltLength)
+	_, err := rand.Read(b)
+
+	if err != nil {
+		return nil, err
 	}
-	return b
+
+	return b, nil
 }

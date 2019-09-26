@@ -9,12 +9,19 @@ import (
 var iv = []byte("Ba4LfxiJ36E5vQW1")
 
 func encrypt(text []byte) ([]byte, error) {
-	text = append(salt(), text...) // add salt as a prefix
+	spice, err := salt()
+
+	if err != nil {
+		return nil, err
+	}
+
+	text = append(spice, text...) // add salt as a prefix
 	block, _ := aes.NewCipher(secret)
 	b := base64.StdEncoding.EncodeToString(text)
 	ciphertext := make([]byte, len(b))
 	cfb := cipher.NewCFBEncrypter(block, iv)
 	cfb.XORKeyStream(ciphertext, []byte(b))
+
 	return ciphertext, nil
 }
 
@@ -23,7 +30,7 @@ func decrypt(text []byte) ([]byte, error) {
 	cfb := cipher.NewCFBDecrypter(block, iv)
 	cfb.XORKeyStream(text, text)
 	data, err := base64.StdEncoding.DecodeString(string(text))
-	data = data[16:len(data)] // remove salt
+	data = data[saltLength:len(data)] // remove salt
 	if err != nil {
 		return nil, err
 	}
