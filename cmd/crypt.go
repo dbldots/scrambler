@@ -4,6 +4,8 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
+	"fmt"
+	"os"
 )
 
 var iv = []byte("Ba4LfxiJ36E5vQW1")
@@ -30,9 +32,11 @@ func decrypt(text []byte) ([]byte, error) {
 	cfb := cipher.NewCFBDecrypter(block, iv)
 	cfb.XORKeyStream(text, text)
 	data, err := base64.StdEncoding.DecodeString(string(text))
-	data = data[saltLength:len(data)] // remove salt
 	if err != nil {
-		panic(`Unable to decrypt value, check your secret`)
+		fmt.Println(`Unable to decrypt value, check your secret`)
+		os.Exit(1)
 	}
+
+	data = data[saltLength:len(data)] // remove salt
 	return data, nil
 }
