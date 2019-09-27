@@ -11,11 +11,7 @@ import (
 var iv = []byte("Ba4LfxiJ36E5vQW1")
 
 func encrypt(text []byte) ([]byte, error) {
-	spice, err := salt()
-
-	if err != nil {
-		return nil, err
-	}
+	spice := salt(text, secret)
 
 	text = append(spice, text...) // add salt as a prefix
 	block, _ := aes.NewCipher(secret)
