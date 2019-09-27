@@ -14,7 +14,7 @@
 
 package main
 
-import "./cmd"
+import "github.com/dbldots/scrambler/cmd"
 
 func main() {
 	cmd.Execute()
