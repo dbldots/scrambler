@@ -1,18 +1,15 @@
 package cmd
 
 import (
-	"crypto/rand"
+	"crypto/sha512"
 )
 
-var saltLength = 16
+var saltLength = 25
 
-func salt() ([]byte, error) {
-	b := make([]byte, saltLength)
-	_, err := rand.Read(b)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return b, nil
+func salt(text []byte, secret []byte) ([]byte) {
+	buf := []byte{}
+	buf = append(buf, secret...)
+	buf = append(buf, text...)
+	checksum := sha512.Sum512(buf)
+	return checksum[0:saltLength]
 }
