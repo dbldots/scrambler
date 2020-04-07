@@ -5,6 +5,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
@@ -28,7 +29,8 @@ scrambler edit config.yml`,
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		file, _ := ioutil.TempFile(os.TempDir(), "scrambler")
+		extension := filepath.Ext(args[0])
+		file, _ := ioutil.TempFile(os.TempDir(), "scrambler*" + extension)
 		defer os.Remove(file.Name())
 
 		buf, _ := ioutil.ReadFile(args[0])
