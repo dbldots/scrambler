@@ -3,10 +3,10 @@
 Scrambler aims to provide a simple way to let you secure sensible
 information such as credentials you don't want to put into source control.
 
-## Install
+## Install, #1 the go way
 
 ```
-go get github.com/dbldots/scrambler
+go install github.com/dbldots/scrambler@latest
 ```
 
 ## Usage
