@@ -1,3 +1,4 @@
+# needs to be triggered manually
 name: release
 
 on:
